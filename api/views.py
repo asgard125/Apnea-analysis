@@ -23,10 +23,10 @@ def predict(request):
     create_docx()
     checked_items = request.POST.getlist("item_checkbox")
     print(checked_items)
-    file_path = 'table1.docx'
+    file_path = 'result.docx'
     with open(file_path,'rb') as doc:
         response = HttpResponse(doc.read(), content_type='application/ms-word')
-        response['Content-Disposition'] = 'attachment;filename=resut.docx'
+        response['Content-Disposition'] = 'attachment;filename=result.docx'
         return response
 
 
