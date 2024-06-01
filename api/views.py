@@ -4,12 +4,12 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.generics import (CreateAPIView, ListAPIView,
                                      RetrieveAPIView,
                                      RetrieveUpdateDestroyAPIView,
-                                     UpdateAPIView)
+                                     UpdateAPIView, ListCreateAPIView)
 from django.shortcuts import get_object_or_404, render
 from .models import Patient, Experiment
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializer import CreateOrganizationSerialize
+from .serializer import PatientListSerializer, PatientSerializer
 
 
 def index(request):
@@ -20,15 +20,8 @@ def postuser(request):
     return HttpResponse(f"<h2>Selected: {checked_items}</h2>") 
 
 
-class CreateOrganizatonApi(ListAPIView, CreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Patient.objects.all()
-    serializer_class = CreateOrganizationSerialize
-
-    def list(self, request):
-        queryset = self.get_queryset()
-        serializer = CreateOrganizationSerialize(queryset, many=True)
-        return Response(serializer.data)
-
+class PatientList(ListCreateAPIView):
+    queryset = Experiment.objects.all()
+    serializer_class = PatientListSerializer
 
 # Create your views here.

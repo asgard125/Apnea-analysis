@@ -10,9 +10,22 @@ from rest_framework.validators import UniqueValidator
 
 from .models import Patient, Experiment
 
-class CreateOrganizationSerialize(serializers.ModelSerializer):
+class PatientSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Patient
         fields = '__all__'
+
+
+class PatientListSerializer(serializers.ModelSerializer):
+    question_pk = serializers.PrimaryKeyRelatedField(
+        queryset=Patient.objects.all(), write_only=True
+    )
+
+    class Meta:
+        model = Experiment
+        fields = '__all__'
+        depth = 1
+
 
 
