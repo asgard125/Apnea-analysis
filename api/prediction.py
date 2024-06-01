@@ -1,5 +1,7 @@
 import docx
 import pandas as pd
+import glob
+import os
 
 def model():
     healthy_indices = set(list(range(1, 16)) + list(range(26, 31)))
@@ -15,7 +17,6 @@ def create_docx():
             'Time', 'Length', 'Mass', 'Electric current', 'Thermodynamic temperature',
             'Amount of substance', 'Luminous intensity'
         ],
-        'Emojii': ['🕒', '📏', '🏋️', '⚡', '🌡️', '⚛️', '💡']
     }
     df = pd.DataFrame(si_units)
 
@@ -34,5 +35,9 @@ def create_docx():
     # Save the Word doc
     doc.save('table1.docx')
 
-    #f = open("media/1.txt", "r")
+    #reading last input file
+    #list_of_files = glob.glob('media/*') # * means all if need specific format then *.csv
+    #latest_file = max(list_of_files, key=os.path.getctime)
+    #print(latest_file)
+    #f = open(latest_file, "r")
     #print(f.read()) 
