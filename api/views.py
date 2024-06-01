@@ -10,6 +10,7 @@ from .models import Patient, Experiment
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializer import PatientListSerializer, PatientSerializer
+from .prediction import model
 
 
 def index(request):
