@@ -30,6 +30,26 @@ def predict(request):
         return response
 
 
+def selected_patient(request):
+    patients = Patient.objects.all()
+
+    if request.method == "POST":
+        selected_patient = request.POST.get("id")
+        patients = patients.filter(id = selected_patient)
+
+    return HttpResponse(status=200)
+
+
+def selected_experiment(request):
+    experiments = Experiment.objects.all()
+
+    if request.method == "POST":
+        selected_experiment = request.POST.get("id")
+        experiments = experiments.filted(id = selected_patient)
+
+    return HttpResponse(status=200)
+
+
 class PatientList(ListCreateAPIView):
     queryset = Experiment.objects.all()
     serializer_class = PatientListSerializer
