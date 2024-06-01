@@ -19,7 +19,7 @@ def index(request):
     return render(request, "index.html")
  
 
-def postuser(request):
+def predict(request):
     create_docx()
     checked_items = request.POST.getlist("item_checkbox")
     print(checked_items)
@@ -42,8 +42,6 @@ class FileUploadAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            # you can access the file like this from serializer
-            # uploaded_file = serializer.validated_data["file"]
             serializer.save()
             return Response(
                 serializer.data,
@@ -55,6 +53,3 @@ class FileUploadAPIView(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-
-
-# Create your views here.

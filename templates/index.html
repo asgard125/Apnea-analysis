@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>Brain Fields</h2>
-    <form method="post" action="postuser/">
+    <form method="post" action="predict/">
         {% csrf_token %}
         <input type="checkbox" name="item_checkbox" value=1 >A1<br>
         <input type="checkbox" name="item_checkbox" value=2 >A2<br>
@@ -15,9 +15,5 @@
         <input type="checkbox" name="item_checkbox" value=5 >T5<br>
         <input type="submit" value="Send" />
     </form>
-
-    <div id="app">
-      {{ message }}
-    </div>
 </body>
 </html>

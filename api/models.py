@@ -16,7 +16,3 @@ class UploadedFile(models.Model):
     def __str__(self):
         return self.uploaded_on.date()
 
-
-    # organizations = models.Manager()
-
-# Create your models here.

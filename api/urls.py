@@ -5,4 +5,3 @@ from .views import *
 
 urlpatterns = [path('patients/', PatientList.as_view())]
 
-
