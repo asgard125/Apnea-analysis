@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializer import PatientListSerializer, PatientSerializer
 from .prediction import model, create_docx
+from rest_framework.parsers import FormParser, MultiPartParser
+from .serializer import FileUploadSerializer
 
 
 def index(request):
@@ -31,5 +33,28 @@ def postuser(request):
 class PatientList(ListCreateAPIView):
     queryset = Experiment.objects.all()
     serializer_class = PatientListSerializer
+
+
+class FileUploadAPIView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = FileUploadSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # you can access the file like this from serializer
+            # uploaded_file = serializer.validated_data["file"]
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
 
 # Create your views here.

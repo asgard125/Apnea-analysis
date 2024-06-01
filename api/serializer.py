@@ -8,7 +8,7 @@ from rest_framework.fields import CurrentUserDefault
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from .models import Patient, Experiment
+from .models import Patient, Experiment, UploadedFile
 
 class PatientSerializer(serializers.ModelSerializer):
 
@@ -27,5 +27,10 @@ class PatientListSerializer(serializers.ModelSerializer):
         fields = '__all__'
         depth = 1
 
+
+class FileUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadedFile
+        fields = ('file', 'uploaded_on',)
 
 
