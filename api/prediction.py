@@ -94,8 +94,15 @@ def create_docx():
 
 
     #reading last input file
-    #list_of_files = glob.glob('media/*') # * means all if need specific format then *.csv
-    #latest_file = max(list_of_files, key=os.path.getctime)
-    #print(latest_file)
+    list_of_files = glob.glob('media/*') # * means all if need specific format then *.csv
+    latest_file = max(list_of_files, key=os.path.getctime)
+    print(latest_file)
     #f = open(latest_file, "r")
     #print(f.read()) 
+    df = pd.read_csv(latest_file) 
+    print(df.head())
+    row = df.loc[(df['pat'] == 1) & (df['rec'] == 1)]
+    print(row.iloc[0]['age'])
+
+    
+

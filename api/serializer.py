@@ -33,3 +33,4 @@ class FileUploadSerializer(serializers.ModelSerializer):
         model = UploadedFile
         fields = ('file', 'uploaded_on',)
 
+

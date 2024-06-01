@@ -13,6 +13,9 @@ from .serializer import PatientListSerializer, PatientSerializer
 from .prediction import model, create_docx
 from rest_framework.parsers import FormParser, MultiPartParser
 from .serializer import FileUploadSerializer
+import glob
+import os
+import pandas as pd
 
 
 def index(request):
@@ -30,12 +33,26 @@ def predict(request):
         return response
 
 
+class ListSelected(ListCreateAPIView):
+
+    patients = Patient.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        if request.method == "POST":
+            selected_patient = request.POST.get("id")
+            patients = patients.filter(id = selected_patients)
+
+    queryset = patients
+    serializer_class = PatientSerializer
+
+
 def selected_patient(request):
     patients = Patient.objects.all()
 
     if request.method == "POST":
         selected_patient = request.POST.get("id")
         patients = patients.filter(id = selected_patient)
+
 
     return HttpResponse(status=200)
 
@@ -45,7 +62,7 @@ def selected_experiment(request):
 
     if request.method == "POST":
         selected_experiment = request.POST.get("id")
-        experiments = experiments.filted(id = selected_patient)
+        experiments = experiments.filted(id = selected_experiment)
 
     return HttpResponse(status=200)
 
