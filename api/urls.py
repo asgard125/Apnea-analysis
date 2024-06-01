@@ -3,6 +3,6 @@ from rest_framework import routers
 
 from .views import *
 
-urlpatterns = [path('organization/', PatientList.as_view())]
+urlpatterns = [path('patients/', PatientList.as_view())]
 
 
