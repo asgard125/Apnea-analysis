@@ -33,3 +33,6 @@ def create_docx():
 
     # Save the Word doc
     doc.save('table1.docx')
+
+    #f = open("media/1.txt", "r")
+    #print(f.read()) 
