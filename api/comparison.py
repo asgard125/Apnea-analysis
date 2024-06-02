@@ -15,9 +15,8 @@ def calc():
     scores = crossval_catboost(X, y, 4)
     mean_metric = sum(scores[i] for i in range(len(scores))) / len(scores)
     
-    res = "Вероятность: "
+    res = "Вероятность наличния апноэ: "
     res += str(model.predict(1))
-
 
     return res 
 

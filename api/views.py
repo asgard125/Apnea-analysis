@@ -23,32 +23,31 @@ def index(request):
     return render(request, "index.html")
 
 
-
 def PredictResult(request):
     res = ""
     res = calc()
     print(res)
+    create_docx(res)
 
     result = Result.objects.create(
             prediction = res
             ) 
 
-    return HttpResponse(status=200)
+    file_path = 'result.docx'
+    with open(file_path,'rb') as doc:
+        response = HttpResponse(doc.read(), content_type='application/ms-word')
+        response['Content-Disposition'] = 'attachment;filename=result.docx'
+        return response
 
 
 class ResultJSON(ListCreateAPIView):
     queryset = Result.objects.all()
-    queryset.reverse()[0]
     serializer_class = ResultSerializer
 
 
 def predict(request):
     res = ""
-    #res = calc()
-    #print(res)
-    create_docx()
-    #checked_items = request.POST.getlist("item_checkbox")
-    #print(checked_items)
+    create_docx(res)
     file_path = 'result.docx'
     with open(file_path,'rb') as doc:
         response = HttpResponse(doc.read(), content_type='application/ms-word')
