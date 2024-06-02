@@ -24,3 +24,6 @@ class UploadedFile(models.Model):
     def __str__(self):
         return self.uploaded_on.date()
 
+
+class Result(models.Model):
+    prediction = models.CharField(max_length=512, default='', unique=False)

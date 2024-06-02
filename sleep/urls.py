@@ -9,8 +9,6 @@ urlpatterns = [
     path("", views.index),
     path("predict/", views.predict),
     path('api/', include('api.urls')),
-    path('selected_patient/', views.selected_patient), 
-    path('selected_experiment/', views.selected_experiment),
     path('upload-file/', views.FileUploadAPIView.as_view(), name='upload-file'),
 ]
 

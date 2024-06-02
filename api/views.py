@@ -6,26 +6,49 @@ from rest_framework.generics import (CreateAPIView, ListAPIView,
                                      RetrieveUpdateDestroyAPIView,
                                      UpdateAPIView, ListCreateAPIView)
 from django.shortcuts import get_object_or_404, render
-from .models import Patient, Experiment
+from .models import Patient, Experiment, Result
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializer import PatientListSerializer, PatientSerializer
-from .prediction import model, create_docx
+from .serializer import PatientListSerializer, PatientSerializer, SelectedWriteSerializer, ResultSerializer
+from .prediction import create_docx
 from rest_framework.parsers import FormParser, MultiPartParser
 from .serializer import FileUploadSerializer
 import glob
 import os
 import pandas as pd
+from .comparison import calc
 
 
 def index(request):
     return render(request, "index.html")
- 
+
+
+
+def PredictResult(request):
+    res = ""
+    res = calc()
+    print(res)
+
+    result = Result.objects.create(
+            prediction = res
+            ) 
+
+    return HttpResponse(status=200)
+
+
+class ResultJSON(ListCreateAPIView):
+    queryset = Result.objects.all()
+    queryset.reverse()[0]
+    serializer_class = ResultSerializer
+
 
 def predict(request):
+    res = ""
+    #res = calc()
+    #print(res)
     create_docx()
-    checked_items = request.POST.getlist("item_checkbox")
-    print(checked_items)
+    #checked_items = request.POST.getlist("item_checkbox")
+    #print(checked_items)
     file_path = 'result.docx'
     with open(file_path,'rb') as doc:
         response = HttpResponse(doc.read(), content_type='application/ms-word')
@@ -37,34 +60,38 @@ class ListSelected(ListCreateAPIView):
 
     patients = Patient.objects.all()
 
+    serializer_class = SelectedWriteSerializer
+
+    patient_id = 1
+
     def post(self, request, *args, **kwargs):
         if request.method == "POST":
-            selected_patient = request.POST.get("id")
-            patients = patients.filter(id = selected_patients)
+            serializer = SelectedWriteSerializer(data=request.data, partial=True)
 
-    queryset = patients
+            if serializer.is_valid():
+                instance = serializer.save()
+
+            response_data = serializer.data
+            response_data['id'] = instance.id
+            print(response_data)
+
+            print("response_data['id'] = ", response_data['id'])
+
+            global patient_id
+
+            patient_id = response_data['id']
+            PredictResult(request)
+
+            #print(serializer)
+            #print(serializer.initial_data['id'])
+            #selected_patient = request.POST.get("id")
+            #print("selected_patient = ", selected_patient)
+            #patients = Patient.objects.all().filter(id = selected_patient)
+            #predict(request)
+            return Response(status=status.HTTP_200_OK)
+
+    queryset = patients.filter(id=patient_id)
     serializer_class = PatientSerializer
-
-
-def selected_patient(request):
-    patients = Patient.objects.all()
-
-    if request.method == "POST":
-        selected_patient = request.POST.get("id")
-        patients = patients.filter(id = selected_patient)
-
-
-    return HttpResponse(status=200)
-
-
-def selected_experiment(request):
-    experiments = Experiment.objects.all()
-
-    if request.method == "POST":
-        selected_experiment = request.POST.get("id")
-        experiments = experiments.filted(id = selected_experiment)
-
-    return HttpResponse(status=200)
 
 
 class PatientList(ListCreateAPIView):
